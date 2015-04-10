@@ -3,8 +3,13 @@
 from datetime import date
 from lxml import etree
 
-__license__ = 'GPL v3'
 __copyright__ = '2015, April King <april@twoevils.org>'
+__license__ = 'GPL v3'
+__version__ = '1.0'
+
+'''
+http://www.thecodelesscode.com/
+'''
 
 from calibre.web.feeds.news import BasicNewsRecipe
 from calibre.ebooks.BeautifulSoup import BeautifulSoup as bs
@@ -31,7 +36,6 @@ class CodelessCode(BasicNewsRecipe):
 	publisher             = 'Qi'
 	simultaneous_downloads = 1
 	url                   = 'http://www.thecodelesscode.com'
-	version               = 1.0
 
 	def create_opf(self, feeds, dir=None):
 		'''
