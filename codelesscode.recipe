@@ -5,7 +5,7 @@ from lxml import etree
 
 __copyright__ = '2015, April King <april@twoevils.org>'
 __license__ = 'GPL v3'
-__version__ = '1.0'
+__version__ = '1.1'
 
 '''
 http://www.thecodelesscode.com/
