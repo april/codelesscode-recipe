@@ -5,7 +5,7 @@ from lxml import etree
 
 __copyright__ = '2015, April King <april@twoevils.org>'
 __license__ = 'GPL v3'
-__version__ = '1.1'
+__version__ = '1.2'
 
 '''
 http://www.thecodelesscode.com/
@@ -36,6 +36,7 @@ class CodelessCode(BasicNewsRecipe):
 	language              = 'en'
 	max_articles_per_feed = 1000  # I can only wish
 	path_remappings       = {}    # IE, /case/182 -> articles_72/index.html
+	publication_type      = 'blog'
 	publisher             = 'Qi'
 	scale_news_images     = (600, 400)
 	simultaneous_downloads = 1
@@ -129,9 +130,8 @@ class CodelessCode(BasicNewsRecipe):
 				else:
 					# Again, a hacky way to get the contents of the tag, thanks to BS3
 					contents = list(anchor.contents)
-					contents.reverse()
 					linktext = bs()
-					for i in contents:
+					for i in reversed(contents):
 						linktext.insert(1, i)
 					anchor.replaceWith(linktext)
 
@@ -173,4 +173,13 @@ class CodelessCode(BasicNewsRecipe):
 		# Change the creator from "calibre" to the actual author
 		# Also, we don't need the date in the ebook's title
 		oeb.metadata.items['creator'][0].value = self.publisher
+		oeb.metadata.items['description'][0].value = oeb.metadata.items['description'][0].value.split('\n\nArticles in this issue')[0]
+		oeb.metadata.items['publication_type'][0].value = self.title
+		oeb.metadata.items['publisher'][0].value = self.publisher
 		oeb.metadata.items['title'][0].value = self.title
+
+		# DEBUGGING STUFF
+		# from pprint import pprint
+		# from inspect import getmembers
+		# pprint(getmembers(oeb.metadata))
+		# pprint(getmembers(oeb.spine))
