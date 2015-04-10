@@ -1,6 +1,6 @@
 # codelesscode-recipe
 
-The Codeless Code, by Qi
+<a href="http://www.thecodelesscode.com/">The Codeless Code</a>, by Qi
 
 ### Executing
 
