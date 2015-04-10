@@ -17,9 +17,9 @@ class CodelessCode(BasicNewsRecipe):
 		chapters              = {}    # ie, Mousetrap -> 182
 		cover_url             = 'http://www.thecodelesscode.com/pages/case-9/Lotus-050.jpg'
 		credits               = [ u'<h2 class="chapter_title">{0}</h2>'.format(title),
-														  u'<p>By <em>Qi</em></p>',
+		                          u'<p>By <em>Qi</em></p>',
 		                          u'<p>An illustrated collection of (sometimes violent) fables concerning the Art and Philosophy of software development, written in the spirit of Zen kōans</p>',
-														  u'<p>eBook conversion courtesy of <em>{0}</em></p>'.format(__author__) ]
+		                          u'<p>eBook conversion courtesy of <em>{0}</em></p>'.format(__author__) ]
 		description           = u'The Art and Philosophy of software development, written in the spirit of Zen kōans'
 		extra_css             = '.article_date { display: none; float: right; } \
 		                         .chapter_title { font-size: 1.75em; margin-top: 0; } \
