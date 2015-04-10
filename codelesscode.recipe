@@ -19,6 +19,8 @@ class CodelessCode(BasicNewsRecipe):
 	title                 = u'The Codeless Code'
 	category              = 'fiction, programming, technology'
 	chapters              = {}    # ie, Mousetrap -> 182
+	compress_news_images  = True
+	compress_news_images_max_size = 100
 	cover_url             = 'http://www.thecodelesscode.com/pages/case-9/Lotus-050.jpg'
 	credits               = [ u'<h2 class="chapter_title">{0}</h2>'.format(title),
 	                          u'<p>By <em>Qi</em></p>',
@@ -28,12 +30,14 @@ class CodelessCode(BasicNewsRecipe):
 	extra_css             = '.article_date { display: none; float: right; } \
 	                         .chapter_title { font-size: 1.75em; margin-top: 0; } \
 	                         .chapter_title::first-letter { font-size: 1.35em; font-weight: 500; letter-spacing: -.05em; } \
-	                         h2 { margin-top: 0; }'
+	                         h2 { margin-top: 0; } \
+													 .image_wrapper { text-align: center; }'
 	index                 = 'http://www.thecodelesscode.com/contents'
 	language              = 'en'
 	max_articles_per_feed = 1000  # I can only wish
 	path_remappings       = {}    # IE, /case/182 -> articles_72/index.html
 	publisher             = 'Qi'
+	scale_news_images     = (600, 400)
 	simultaneous_downloads = 1
 	url                   = 'http://www.thecodelesscode.com'
 
@@ -107,17 +111,19 @@ class CodelessCode(BasicNewsRecipe):
 
 		# Kind of a hack-y way to get .children in BS3  <a><b><c></c></b></a>  -> <b><c></c></b>
 		contents = list(koan.contents)
-		contents.reverse()
 		koan = bs(title)
 
-		for i in contents:
+		for i in reversed(contents):
 			koan.insert(1, i)
 
+		# Remove all anchors that don't contain /case/, leaving them as just their text
+		# Note that we'll come back and clean up /case/ links when the URLs are remapped
+		# during postprocess_book()
 		anchors = koan.findAll('a')
 		if anchors != []:
 			for anchor in anchors:
 				if '/case/' in anchor['href']:
-					pass  # leave these alone, fix in postprocess_book()
+					pass
 				elif 'note' in anchor['href']:
 					anchor.replaceWith('')
 				else:
@@ -129,6 +135,14 @@ class CodelessCode(BasicNewsRecipe):
 						linktext.insert(1, i)
 					anchor.replaceWith(linktext)
 
+		# Find all the images, and wrap them up in an image_wrapper div
+		for i in range(0, len(koan.contents), 1):
+			if not hasattr(koan.contents[i], 'name'): continue  # skip carriage returns
+			if koan.contents[i].name == u'img':
+				div = bs('<div class="image_wrapper"></div>')
+				div.div.insert(0, koan.contents[i])
+				koan.insert(i, div)
+				
 		return(koan)
 
 	def postprocess_book(self, oeb, opts, log):
