@@ -1,11 +1,9 @@
 # codelesscode-recipe
 
-The Codeless Code, by Qi
+<a href="http://www.thecodelesscode.com/">The Codeless Code</a>, by Qi
 
 ### Executing
 
-ebook-convert codelesscode.recipe .epub
-
-ebook-convert codelesscode.recipe .mobi
+./codelesscode.sh
 
 ... it's that easy!
