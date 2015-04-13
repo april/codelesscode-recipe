@@ -35,7 +35,6 @@ class CodelessCode(BasicNewsRecipe):
 	index                 = 'http://www.thecodelesscode.com/contents'
 	language              = 'en'
 	max_articles_per_feed = 1000  # I can only wish
-	path_remappings       = {}    # IE, /case/182 -> articles_72/index.html
 	publication_type      = 'blog'
 	publisher             = 'Qi'
 	resolve_internal_links = True
@@ -136,18 +135,6 @@ class CodelessCode(BasicNewsRecipe):
 		return BasicNewsRecipe.canonicalize_internal_url(self, url, is_link=is_link)
 		
 	def postprocess_book(self, oeb, opts, log):
-		# Go through each internal representation of each HTML file, and fix all the broken hrefs, if possible
-		for item in oeb.manifest.items:
-			if item.media_type == 'text/html':
-
-				for node in item.data.xpath('//*[@href]'):
-					naughty_href = node.get('href')
-
-					if naughty_href in self.path_remappings:
-						node.set('href', '../' + self.path_remappings[ naughty_href ] )
-						href = node.get('href')
-						self.log("Remapped href {0} --> {1}".format(naughty_href, href))
-
 		# Remove the superfluous extra feed page at the beginning of the book, replacing it
 		# with the proper credits
 		for item in oeb.manifest.hrefs['index.html'].data.xpath('//*[local-name()="ul"]'):
